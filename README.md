@@ -5,8 +5,11 @@
 * npm install fivebeans
 * npm install bluebird
 
-
 ## fivebeans_seed_job.js (producer)
 * for seeding jobs to fivebeans server
 * usage: node fivebeans_seed_job.js [From ISOCurrency] [To ISOCurrency]
 
+## worker_main.js (consumer)
+* usage: node worker_main.js
+
+## ProcessExchangeRateHandler.js (handler for the consumer)

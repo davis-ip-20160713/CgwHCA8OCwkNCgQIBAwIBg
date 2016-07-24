@@ -1,11 +1,11 @@
-var fivebeans = require("fivebeans");
-var host = 'challenge.aftership.net';
-var port = '11300';
-var tubename = 'davis-ip-20160713';
-var client = new fivebeans.client(host, port);
+const fivebeans = require("fivebeans");
+const host = 'challenge.aftership.net';
+const port = '11300';
+const tubename = 'davis-ip-20160713';
+const client = new fivebeans.client(host, port);
 
-var from = process.argv[2];
-var to = process.argv[3];
+let from = process.argv[2];
+let to = process.argv[3];
 
 console.log(from, to);
 if(from === undefined || from.length != 3 || to === undefined || to.length != 3) {
@@ -13,7 +13,7 @@ if(from === undefined || from.length != 3 || to === undefined || to.length != 3)
   process.exit(1);
 }
 
-var job = {
+let job = {
   type: 'processExchangeRate',
   payload: JSON.stringify({
     "from": from,
