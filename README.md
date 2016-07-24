@@ -10,6 +10,6 @@
 * usage: node fivebeans_seed_job.js [From ISOCurrency] [To ISOCurrency]
 
 ## worker_main.js (consumer)
-* usage: node worker_main.js
+* usage: node worker_main.js [worker_id]
 
 ## ProcessExchangeRateHandler.js (handler for the consumer)
