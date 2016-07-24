@@ -15,12 +15,17 @@ const failCountMax = 3;
 const successJobDelay = 60;                // in seconds
 const failJobDelay = 3;                    // in seconds
 
-
+/**
+ *  helper function for round number to n decimal place
+ */
 function roundTo(num, decimalPlace) {
     return +(Math.round(num + "e+".concat(decimalPlace))  + "e-".concat(decimalPlace));
 }
 
-
+/**
+ * Get the beanstalk client promise 
+ * @returns {Promise} Promise resolving the beanstalk client
+ */
 function getBeanstalkClientPromise() {
   return new Promise(function(resolve, reject) {
     let client = new fivebeans.client('challenge.aftership.net', 11300);
@@ -37,6 +42,10 @@ function getBeanstalkClientPromise() {
   });
 }
 
+/**
+ * Get the use tube promise
+ * @returns {Promise} Promise resolving the beanstalk client
+ */
 function getUseTubePromise(client) {
   return new Promise(function(resolve, reject) {
     client.use(tubename, function(err, tubename) {
@@ -46,6 +55,15 @@ function getUseTubePromise(client) {
   });
 }
 
+/**
+ * Get the put job promise
+ * @param {fivebeans.Client} client
+ * @param {Number} priority
+ * @param {Number} delay - in seconds
+ * @param {Number} time-to-run - in seconds
+ * @param {object} payload - the job
+ * @returns {Promise} - Promise resolving the jobid
+ */
 function getPutJobPromise(client, priority, delay, ttr, payload) {
   return new Promise(function(resolve, reject) {
     console.log('Put the payload', payload);
@@ -55,6 +73,12 @@ function getPutJobPromise(client, priority, delay, ttr, payload) {
   });
 }
 
+/**
+ * Get the exchange rate promise
+ * @param {string} [from] - from ISO currency
+ * @param {string} [to] - to ISO currency
+ * @returns {Promise}
+ */
 function getExchangeRatePromise(from, to) {
 
   return new Promise(function(resolve, reject) {
@@ -86,6 +110,13 @@ function getExchangeRatePromise(from, to) {
   });
 }
 
+/**
+ * Get the connected mongoDb instance promise on successful connection,
+ * otherwise get the error
+ * @param {mongoClient} [client] - mongoDb Client
+ * @param {string} [url] - connection url
+ * @returns {Promise} - Promise resolving the mongoDb instance on successful connection, otherwise the error message
+ */
 function getConnectToMongoDbPromise(client, url) {
   return new Promise(function(resolve, reject) {
     client.connect(url, function(err, db) {
@@ -100,8 +131,15 @@ function getConnectToMongoDbPromise(client, url) {
   });
 }
 
+/**
+ * Get the document insertion action promise
+ * @param {mongoDb} [db] - mongoDb
+ * @param {object} [exchangeRateObj] - e.g. JSON.stringify({ "from": "HKD", "to": "USD", "created_at": new Date(1347772624825), "rate": "0.13" })
+ * @returns {Promise} - Promise resolving nothing
+ */
 function getInsertDocumentPromise(db, exchangeRateObj) {
   return new Promise(function(resolve, reject) {
+    console.log('about to insert into mongoDb', exchangeRateObj);
     db.collection('exchangeRates').insertOne(exchangeRateObj, function(err, result) {
       db.close(function() {
         console.log('db connection is closed');
@@ -120,7 +158,7 @@ module.exports = function()
     }
 
 	ProcessExchangeRateHandler.prototype.work = function(payload, callback) {
-	  callback('success');
+	  callback('success'); // this will delete the job to prevent multicast effect
 	  var payloadObj = JSON.parse(payload.toString());
 	  console.log('in work, payload: ', payloadObj);
 	  var from = payloadObj.from;

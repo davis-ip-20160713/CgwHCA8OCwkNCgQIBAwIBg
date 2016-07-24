@@ -1,3 +1,5 @@
+'use strict';
+
 const fivebeans = require("fivebeans");
 const host = 'challenge.aftership.net';
 const port = '11300';
@@ -7,11 +9,13 @@ const client = new fivebeans.client(host, port);
 let from = process.argv[2];
 let to = process.argv[3];
 
-console.log(from, to);
+
 if(from === undefined || from.length != 3 || to === undefined || to.length != 3) {
   console.error('Either "from" argument or "to" argument is invalid, should be 3 letters');
   process.exit(1);
 }
+
+console.log('From currency: ' + from , 'To currency: ' + to);
 
 let job = {
   type: 'processExchangeRate',
