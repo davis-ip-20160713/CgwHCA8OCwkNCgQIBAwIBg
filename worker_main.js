@@ -28,7 +28,7 @@ co(function* main() {
 		console.error(e);
 	  })
 	  .on('close', function() {
-		console.log('worker is now closing', arguments);
+		console.log('worker ' + workerid + ' is now closing', arguments);
 	  })
 	  .on('started', function() {
 		console.log('started', arguments);
